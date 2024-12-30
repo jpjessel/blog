@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1, h2 {
+        text-align: center;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+      input[type="text"], select {
+        width: 100%; /* Full width */
+        padding: 8px; /* Padding */
+        border: 1px solid #ccc; /* Border */
+        border-radius: 4px; /* Rounded corners */
+        box-sizing: border-box; /* Include padding and border in element's total width */
+      }
+      select {
+        width: auto; /* Set width to auto for dropdown */
+        padding: 6px; /* Padding */
+      }
+      button {
+        background-color: #007bff; /* Button color */
+        color: white; /* Text color */
+        padding: 10px 15px; /* Padding */
+        border: none; /* Remove border */
+        border-radius: 4px; /* Rounded corners */
+        cursor: pointer; /* Pointer on hover */
+        width: 100%; /* Full width */
+      }
+      button:hover {
+        background-color: #0056b3; /* Darker button on hover */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Submit an Entry</h1>
+      <form method="POST" action="{{ url_for('admin') }}">
+        {{ form.hidden_tag() }} <!-- CSRF token -->
+        <input type="hidden" name="action" value="create"> <!-- Hidden action field -->
+    
+        <div class="form-group">
+            {{ form.content_type.label }} 
+            {{ form.content_type(class="form-control") }} <!-- Correct rendering for dropdown -->
+        </div>
+        
+        <div class="form-group">
+            {{ form.title.label }} 
+            {{ form.title(size=40) }} <!-- Wider title input field -->
+        </div>
+        
+        <div class="form-group">
+            {{ form.content.label }} 
+            {{ form.content(rows=10, cols=70) }} <!-- Content input field spans wider -->
+        </div>
+        
+        <div class="form-group">
+            {{ form.priority.label }}
+            {{ form.priority(size=10) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form.submit(class="btn") }} <!-- Submit button styled as a button -->
+        </div>
+    </form>
+      
+      <!-- Admin functionalities for managing posts -->
+      <h2>Manage Posts</h2>
+      <h3>Get A Post</h3>
+      <form method="POST" action="{{ url_for('admin') }}">
+        <!-- Fetch data based on title -->
+        <div class="form-group">
+          <label for="get_title">Get Post by Title:</label>
+          <input type="text" id="get_title" name="get_title" placeholder="Enter title">
+          <button type="submit" name="action" value="fetch" class="btn">Fetch Post</button>
+        </div>
+      </form>
+
+      <form method="POST" action="{{ url_for('admin') }}">
+        <!-- Update or delete posts -->
+        <h3>Update Post</h3>
+        <div class="form-group">
+            <label for="update_title">Title of post to update</label>
+            <input type="text" name="update_title" placeholder="Enter title of post to update" required>
+        </div>
+        <div class="form-group">
+            <label for="content">New Content</label>
+            <textarea name="content" rows="5" placeholder="Update content"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="priority">New Priority</label>
+            <input type="number" name="priority" placeholder="Update priority">
+        </div>
+        <button type="submit" name="action" value="update">Update Post</button>
+      </form>
+      <form method="POST" action="{{ url_for('admin') }}">
+        <div class="form-group">
+          <label for="delete_title">Delete Post by Title:</label>
+          <input type="text" id="delete_title" name="delete_title" placeholder="Enter title">
+          <button type="submit" name="action" value="delete" class="btn">Delete Post</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

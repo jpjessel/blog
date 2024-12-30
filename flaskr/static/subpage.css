@@ -1,0 +1,90 @@
+html, body {
+    height: 100%; /* Full height for body */
+    margin: 0; /* Remove default margin */
+}
+
+body {
+    display: flex; /* Flexbox for body */
+    flex-direction: column; /* Stack children vertically */
+    font-family: 'Open Sans', sans-serif; /* Font for body text */
+    padding-top: 100px;
+    background-image: none;
+    background-color: #f0f0f0; /* Light background for body */
+}
+
+main {
+    flex: 1; /* Allow main to take up the remaining space */
+    padding: 2rem; /* Padding for main content */
+    max-width: 1200px; /* Maximum width for main content */
+    margin: 0 auto; /* Center the main content */
+    padding-top: 290px; /* Adjust this to match the header height */
+}
+
+.story {
+    background-color: white; /* Background for each story */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Padding inside each story */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    margin-bottom: 20px; /* Spacing between stories */
+}
+
+h1 {
+    font-size: 2rem; /* Main title size */
+    color: #333; /* Darker color for main title */
+    text-align: left; /* Center the title */
+    margin-bottom: 1rem; /* Space below title */
+}
+
+h2 {
+    font-size: 1.5rem; /* Sub-title size */
+    color: #141616; /* Change to match hover color in links */
+    margin-bottom: 1rem; /* Space below subtitle */
+}
+
+.post-date {
+    font-style: italic; /* Italicize the text */
+    color: #888; /* Grey color for the date */
+    margin-top: 0.5rem; /* Add some space above the date */
+}
+
+form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.dropdown-label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.styled-dropdown {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    width: 100%;
+    max-width: 300px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.styled-dropdown:focus {
+    border-color: #5a9;
+    box-shadow: 0 0 5px rgba(90, 153, 90, 0.5);
+}
+
+.styled-dropdown option {
+    padding: 10px;
+    font-size: 14px;
+}
+
+#selected-poem {
+    display: none;
+    margin-top: 30px;
+    padding: 20px;
+}

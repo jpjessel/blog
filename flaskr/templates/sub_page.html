@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Latest Short Stories{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='subpage.css') }}" />
+{% endblock %}
+
+{% block content %}
+
+{% if content_array %}
+  {% for entry in content_array %}
+    <div class="story">
+      <h2>{{ entry.title }}</h2>
+      <div id="main-content">{{ entry.content | safe }}</div>
+      <p class="post-date">Posted on: {{ entry.created_at.strftime('%Y-%m-%d') }}</p>
+    </div>
+    <hr>
+  {% endfor %}
+  
+  {% if other_posts_array %}
+    <form>
+      <label for="options" class="dropdown-label">Choose another poem:</label>
+      <select id="poemDropdown" class="styled-dropdown">
+        <option value="" selected disabled>Select a poem</option>
+        {% for entry in other_posts_array %}
+          <option value="{{ entry.id }}" data-title="{{ entry.title }}" data-content="{{ entry.content }}" post-date="{{ entry.created_at.strftime('%Y-%m-%d') }}">{{ entry.title }}</option>
+        {% endfor %}
+      </select>
+    </form>
+    <div id="selected-poem" class="story">
+      <h2 id="poem-title"></h2>
+      <div id="poem-content"></div>
+      <p class="post-date" id="post-date"></p>
+    </div>
+  {% else %}
+    <p>No additional content available.</p>
+  {% endif %}
+{% else %}
+  <p>No content available at the moment.</p>
+{% endif %}
+
+<script>
+  const dropdown = document.getElementById('poemDropdown');
+  const selectedPoem = document.getElementById('selected-poem');
+  
+  if (dropdown) {
+      dropdown.addEventListener('change', function () {
+          const selectedOption = this.options[this.selectedIndex];
+          const title = selectedOption.getAttribute('data-title');
+          const content = selectedOption.getAttribute('data-content');
+          const date = selectedOption.getAttribute('post-date')
+  
+          // Show the selected poem container
+          selectedPoem.style.display = 'block'; // Make the selected poem container visible
+  
+          // Update the title and content
+          const poemTitle = document.getElementById('poem-title');
+          const poemContent = document.getElementById('poem-content');
+          const postDate = document.getElementById('post-date');
+  
+          poemTitle.textContent = title;
+          poemContent.innerHTML = content;
+          postDate.textContent = "Posted on: " + date;
+      });
+  }
+</script>
+
+{% endblock %}

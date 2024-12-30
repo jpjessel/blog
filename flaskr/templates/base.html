@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+    {% block extra_css %}{% endblock %}
+
+    <title>{% block title %}A View From A Bridge{% endblock %}</title>
+</head>
+<body>
+    <header style="position: fixed; top: 0; width: 100%; z-index: 1000; height: 60px;">
+        <div class="navbar">
+            <div class="navbar-wrapper">
+                <div class="logo"><a href="/">A View From A Bridge</a></div>
+                <ul class="links">
+                    <li><a href='poetry'>Poetry</a></li>
+                    <li><a href='football'>Football</a></li>
+                    <li><a href='shortstories'>Short Stories</a></li
+                </ul>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; {{ current_year }} A View From A Bridge. All rights reserved.</p>
+            <ul class="socials">
+                <li><a href="mailto:youremail@example.com"><i class="fas fa-envelope"></i></a></li>
+                <li><a href="#"><i class="fab fa-facebook"></i></a></li>
+                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+            </ul>
+        </div>
+    </footer>
+</body>
+<!-- Footer -->
+</html>
