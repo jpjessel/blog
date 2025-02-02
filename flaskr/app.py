@@ -3,8 +3,9 @@ from flask_migrate import Migrate
 from .config import Config
 from .models import db, Post
 from .forms import PostForm, LoginForm
-from datetime import datetime, date
 import markdown
+from werkzeug.security import generate_password_hash, check_password_hash 
+
 
 app = Flask(__name__)
 app.config.from_object(Config)  # Load config settings
@@ -18,25 +19,18 @@ migrate = Migrate(app, db)
 def index():
     return render_template('home.html')
 
-@app.route('/search', methods=['GET'])
-def search():
-    query = request.args.get('query')
-    # Logic to search for titles in your database
-    # Example: results = your_database_function_to_search_titles(query)
-    # return render_template('search_results.html', results=results)
-    return f"Searching for: {query}"  # Placeholder response
 
 @app.before_request
 def create_tables():
-    # The following line will remove this handler, making it
-    # only run on the first request
     db.create_all()
     
 @app.route('/admin_login', methods=['GET', 'POST'])
 def admin_login():
     form = LoginForm()
     if form.validate_on_submit():
-        if (form.username.data == app.config['ADMIN_USERNAME']) and (form.password.data == app.config['ADMIN_PASSWORD']):
+        hashed_password = generate_password_hash(form.password.data)
+        print(hashed_password)
+        if (form.username.data == app.config['ADMIN_USERNAME']) and (check_password_hash(app.config['ADMIN_PASSWORD'], form.password.data)):
             session['logged_in'] = True
             flash('Login successful!', 'success')
             return redirect(url_for('admin'))
@@ -49,16 +43,16 @@ def logout():
     session.pop('logged_in', None)
     flash('You have been logged out.', 'success')
     return redirect(url_for('admin_login'))
+    
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
-    # Check if the user is logged in
+    
     if not session.get('logged_in'):
         return redirect(url_for('admin_login'))
     
     form = PostForm()
-    posts = Post.query.all()  # Retrieve all posts for display
+    posts = Post.query.all()
     
-    # Handle POST requests (create, update, delete)
     if request.method == 'POST':
         action = request.form.get('action')
         
@@ -119,7 +113,11 @@ def PoemsPage():
             'content': markdown.markdown(entry.content),
             'created_at': entry.created_at
         } for entry in most_important]
-        content_titles = [entry['title'] for entry in content_array]
+        
+        if len(content_array) == 1:
+            content_titles = content_array[0]["title"]
+        else:
+            content_titles = [entry['title'] for entry in content_array]
 
         other_posts = Post.query.filter(~Post.title.in_(content_titles)) \
                                 .where(Post.content_type == 'poetry') \
@@ -162,8 +160,14 @@ def ShortStoryPage():
 @app.route('/football')
 def FootballPage():
     most_important = Post.query.where(Post.content_type == 'football').order_by(Post.priority.asc()).limit(2).all()
+    print(most_important)
     if most_important:
-        content_array = [markdown.markdown(entry.content) for entry in most_important]
+        content_array = [{
+            'title': entry.title,
+            'content': markdown.markdown(entry.content),
+            'created_at': entry.created_at
+        } for entry in most_important]
+        
         content_titles = [entry['title'] for entry in content_array]
 
         other_posts = Post.query.filter(~Post.title.in_(content_titles)) \

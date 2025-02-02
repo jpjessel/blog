@@ -1,128 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Page</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}" />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 20px;
-      }
-      .container {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-      h1, h2 {
-        text-align: center;
-      }
-      .form-group {
-        margin-bottom: 15px;
-      }
-      label {
-        display: block;
-        margin-bottom: 5px;
-      }
-      input[type="text"], select {
-        width: 100%; /* Full width */
-        padding: 8px; /* Padding */
-        border: 1px solid #ccc; /* Border */
-        border-radius: 4px; /* Rounded corners */
-        box-sizing: border-box; /* Include padding and border in element's total width */
-      }
-      select {
-        width: auto; /* Set width to auto for dropdown */
-        padding: 6px; /* Padding */
-      }
-      button {
-        background-color: #007bff; /* Button color */
-        color: white; /* Text color */
-        padding: 10px 15px; /* Padding */
-        border: none; /* Remove border */
-        border-radius: 4px; /* Rounded corners */
-        cursor: pointer; /* Pointer on hover */
-        width: 100%; /* Full width */
-      }
-      button:hover {
-        background-color: #0056b3; /* Darker button on hover */
-      }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        textarea, select, input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: rgb(92, 184, 92);
+            width: 100%;
+            font-size: 16px;
+        }
+        #markdown-preview {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+            max-height: 200px;
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <div class="container">
-      <h1>Submit an Entry</h1>
-      <form method="POST" action="{{ url_for('admin') }}">
-        {{ form.hidden_tag() }} <!-- CSRF token -->
-        <input type="hidden" name="action" value="create"> <!-- Hidden action field -->
-    
-        <div class="form-group">
-            {{ form.content_type.label }} 
-            {{ form.content_type(class="form-control") }} <!-- Correct rendering for dropdown -->
-        </div>
-        
-        <div class="form-group">
-            {{ form.title.label }} 
-            {{ form.title(size=40) }} <!-- Wider title input field -->
-        </div>
-        
-        <div class="form-group">
-            {{ form.content.label }} 
-            {{ form.content(rows=10, cols=70) }} <!-- Content input field spans wider -->
-        </div>
-        
-        <div class="form-group">
-            {{ form.priority.label }}
-            {{ form.priority(size=10) }}
-        </div>
-        
-        <div class="form-group">
-            {{ form.submit(class="btn") }} <!-- Submit button styled as a button -->
-        </div>
-    </form>
-      
-      <!-- Admin functionalities for managing posts -->
-      <h2>Manage Posts</h2>
-      <h3>Get A Post</h3>
-      <form method="POST" action="{{ url_for('admin') }}">
-        <!-- Fetch data based on title -->
-        <div class="form-group">
-          <label for="get_title">Get Post by Title:</label>
-          <input type="text" id="get_title" name="get_title" placeholder="Enter title">
-          <button type="submit" name="action" value="fetch" class="btn">Fetch Post</button>
-        </div>
-      </form>
+        <h1>Submit an Entry</h1>
+        <form method="POST" action="{{ url_for('admin') }}">
+            {{ form.hidden_tag() }}
+            <input type="hidden" name="action" value="create">
 
-      <form method="POST" action="{{ url_for('admin') }}">
-        <!-- Update or delete posts -->
-        <h3>Update Post</h3>
-        <div class="form-group">
-            <label for="update_title">Title of post to update</label>
-            <input type="text" name="update_title" placeholder="Enter title of post to update" required>
-        </div>
-        <div class="form-group">
-            <label for="content">New Content</label>
-            <textarea name="content" rows="5" placeholder="Update content"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="priority">New Priority</label>
-            <input type="number" name="priority" placeholder="Update priority">
-        </div>
-        <button type="submit" name="action" value="update">Update Post</button>
-      </form>
-      <form method="POST" action="{{ url_for('admin') }}">
-        <div class="form-group">
-          <label for="delete_title">Delete Post by Title:</label>
-          <input type="text" id="delete_title" name="delete_title" placeholder="Enter title">
-          <button type="submit" name="action" value="delete" class="btn">Delete Post</button>
-        </div>
-      </form>
+            <div class="form-group">
+                {{ form.content_type.label }}
+                {{ form.content_type(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.title.label }}
+                {{ form.title(size=40) }}
+            </div>
+
+            <div class="form-group">
+                {{ form.content.label }}
+                <textarea id="create-content" name="content" rows="10" cols="70" placeholder="Write your Markdown here..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="markdown-preview">Markdown Preview:</label>
+                <div id="markdown-preview"></div>
+            </div>
+
+            <div class="form-group">
+                {{ form.priority.label }}
+                {{ form.priority(size=10) }}
+            </div>
+
+            <div class="form-group">
+                {{ form.submit(class="btn") }}
+            </div>
+        </form>
+
+        <h1>Update Post</h1>
+        <form method="POST" action="{{ url_for('admin') }}">
+            <div class="form-group">
+                <label for="update_title">Select Post to Update</label>
+                <select name="update_title" id="update_title" required>
+                    <option value="" disabled selected>Select a post</option>
+                    {% for post in posts %}
+                        <option value="{{ post.title }}">{{ post.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="update-content">New Content</label>
+                <textarea id="update-content" name="content" rows="5" placeholder="Update content"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="markdown-preview-update">Markdown Preview:</label>
+                <div id="markdown-preview-update"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="priority">New Priority</label>
+                <input type="number" name="priority" placeholder="Update priority">
+            </div>
+            <button type="submit" name="action" value="update">Update Post</button>
+        </form>
+
+        <h1>Delete Post</h1>
+        <form method="POST" action="{{ url_for('admin') }}">
+            <div class="form-group">
+                <label for="delete_title">Select Post to Delete</label>
+                <select name="delete_title" id="delete_title" required>
+                    <option value="" disabled selected>Select a post</option>
+                    {% for post in posts %}
+                        <option value="{{ post.title }}">{{ post.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" name="action" value="delete" class="btn">Delete Post</button>
+        </form>
     </div>
-  </body>
+
+    <script>
+    // Markdown preview for Create Post
+    const createContent = document.getElementById('create-content');
+    const markdownPreview = document.getElementById('markdown-preview');
+
+    if (createContent && markdownPreview) {
+        createContent.addEventListener('input', () => {
+            console.log("Updating create post preview...");
+            markdownPreview.innerHTML = marked.marked(createContent.value || '');  // Use marked.marked()
+        });
+    } else {
+        console.error("Create post textarea or preview container not found.");
+    }
+
+    // Markdown preview for Update Post
+    const updateContent = document.getElementById('update-content');
+    const markdownPreviewUpdate = document.getElementById('markdown-preview-update');
+
+    if (updateContent && markdownPreviewUpdate) {
+        updateContent.addEventListener('input', () => {
+            console.log("Updating update post preview...");
+            markdownPreviewUpdate.innerHTML = marked.marked(updateContent.value || '');  // Use marked.marked()
+        });
+    } else {
+        console.error("Update post textarea or preview container not found.");
+    }
+    </script>
+</body>
 </html>

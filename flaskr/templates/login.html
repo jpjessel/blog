@@ -4,26 +4,92 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f4f4f9;
+        font-family: Arial, sans-serif;
+      }
+
+      .login-container {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        text-align: center;
+      }
+
+      h1 {
+        margin-bottom: 1.5rem;
+        color: #333;
+      }
+
+      label {
+        font-weight: bold;
+        display: block;
+        margin: 0.5rem 0 0.2rem;
+        text-align: left;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+
+      button {
+        background-color: #4caf50;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      .error-message {
+        color: red;
+        font-size: 0.85rem;
+        margin-top: -0.5rem;
+        margin-bottom: 0.5rem;
+        text-align: left;
+      }
+    </style>
   </head>
   <body>
-    <h1>Login</h1>
-    <form method="POST">
-      {{ form.hidden_tag() }}
-      <div>
-        {{ form.username.label }}<br />
-        {{ form.username(size=32) }}<br />
-        {% for error in form.username.errors %}
-        <span style="color: red">[{{ error }}]</span>
-        {% endfor %}
-      </div>
-      <div>
-        {{ form.password.label }}<br />
-        {{ form.password(size=32) }}<br />
-        {% for error in form.password.errors %}
-        <span style="color: red">[{{ error }}]</span>
-        {% endfor %}
-      </div>
-      <button type="submit">Login</button>
-    </form>
+    <div class="login-container">
+      <h1>Login</h1>
+      <form method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+          {{ form.username.label }}
+          {{ form.username(size=32) }}
+          {% for error in form.username.errors %}
+          <div class="error-message">{{ error }}</div>
+          {% endfor %}
+        </div>
+        <div>
+          {{ form.password.label }}
+          {{ form.password(size=32) }}
+          {% for error in form.password.errors %}
+          <div class="error-message">{{ error }}</div>
+          {% endfor %}
+        </div>
+        <button type="submit">Login</button>
+      </form>
+    </div>
   </body>
 </html>

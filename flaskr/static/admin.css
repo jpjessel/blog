@@ -51,3 +51,7 @@ textarea {
 .btn:hover {
     background-color: #4cae4c; /* Change button color on hover */
 }
+
+.btn {
+    width: 100%;
+}

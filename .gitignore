@@ -11,5 +11,5 @@ htmlcov/
 dist/
 build/
 *.egg-info
-__azurite_db_table*
 __azurite_db_blob*
+__azurite_db_table*
